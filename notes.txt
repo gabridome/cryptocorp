@@ -1,2 +1,15 @@
 notes:
 sandbox url https://s.digitaloracle.co/
+Verifying PII
+POST /keychains/{keychainId}/verifyPii
+
+Creating an Oracle Keychain
+POST /keychains/{keychainId}
+
+str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(wallet_extended_public_key)))
+
+Get an Oracle Keychain
+Get /keychains/{keychainId}
+
+Signing a Transaction
+POST /keychains/{keychainId}/transactions
