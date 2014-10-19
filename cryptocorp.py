@@ -52,13 +52,43 @@ mpk3 = "xpub661MyMwAqRbcFRkyY9XXx6jPMXZ5f4PgJ7C27rE7w1XtyhnH1BefhZk4WH23KEcMxvJy
 #Public key (Hex) # Private key (WIF) KzpRD7AseqCJsxHGadoHwLYVPPXBBSRPcpSM9Da6Gum1Q2FmXN2m
 # address 1HTTvgjWv9zdYdhCvu9biRG3gYu2RBVhCq
 
-import pycoin
+from pycoin.key import *
+from pycoin.key.BIP32Node import *
+
 import uuid
 
 
 keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)))
 
 #Ora che hai le master keys devi costruire le chiavi figlie
+mypriv = Key.from_text(msk1)
+#
+print "questa é la chiave in formato WIF di mypriv: " +  str(Key.wif(mypriv))
+print "queste sono le coordinate della chiave mypriv: " +  str(Key.public_pair(mypriv))
+print "la chiave mypriv in formato hex: " +  str(Key.sec_as_hex(mypriv))
+print "L'indirizzo della chiave mypriv: " +  str(Key.address(mypriv,use_uncompressed=False))
+print "a textual representation of mypriv: " +  str(Key.as_text(mypriv))
+print "Sottochiave 0/0/3/5 di mypriv: " +  str(Key.subkey(mypriv, "0/0/3/5"))
+
+# creo un bip32 wallet da una masterkey
+print "creo un bip32 wallet dalla masterkey" + msk1
+mynewkey = BIP32Node.from_master_secret(msk1)
+# profondità di questa chiave é
+print "La profondità di questa chiave é : " + BIP32Node.tree_depth(mynewkey) + "ovvio. E\' la masterkey"
+print "L\'indice del figlio é : " + BIP32Node.child_index(mynewkey) + "ovvio. E\' la masterkey"
+print "Fingerprint della chiave  : " + BIP32Node.fingerprint(mynewkey) 
+print "Fingerprint del genitore  : " + BIP32Node.parent_fingerprint(mynewkey) 
+print "Master Public key  : " + BIP32Node.hwif(mynewkey)
+
+path = "3H/0/5"
+
+print "Per il percorso " + path + " la chiave in WIF e\'  : " +  BIP32Node.wif(BIP32Node.subkey_for_path(mynewkey, path))
+print "e la pubblica " + path + " e\'  : " +  BIP32Node.hwif(BIP32Node.subkey_for_path(mynewkey, path))
+
+print "La profondità di questa chiave e\' : " + str(BIP32Node.tree_depth(BIP32Node.subkey_for_path(mynewkey, path)))
+print "L\'indice del figlio é : " + str(BIP32Node.child_index(BIP32Node.subkey_for_path(mynewkey, path)))
+
+
 
 
 payload =  {
