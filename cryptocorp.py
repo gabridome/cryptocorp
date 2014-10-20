@@ -99,7 +99,7 @@ print "subkey extended public          : " + mynewsubkey.hwif()
 print "subkey extended private         : " + mynewsubkey.hwif(as_private=True)
 print "Key fingerprint                 : " + mynewsubkey.fingerprint()
 print "WIF key                         : " + mynewsubkey.wif()
-print "Public key to use in multisig   : " + Key.as_text(Key.public_copy(mynewsubkey))
+print "Public key to use in multisig   : " + BIP32Node.as_text(mynewsubkey.public_copy())
 print "Address                         : " + mynewsubkey.address()
 print
 print
