@@ -98,8 +98,9 @@ print "Child index                     : " + str(mynewsubkey.child_index())
 print "subkey extended public          : " + mynewsubkey.hwif()
 print "subkey extended private         : " + mynewsubkey.hwif(as_private=True)
 print "Key fingerprint                 : " + mynewsubkey.fingerprint()
+print "Secret exponent                 : " + mynewsubkey.secret_exponent()
 print "WIF key                         : " + mynewsubkey.wif()
-print "Public key to use in multisig   : " + BIP32Node.as_text(mynewsubkey.public_copy())
+print "Public key to use in multisig   : " + str(BIP32Node.public_copy(mynewsubkey))
 print "Address                         : " + mynewsubkey.address()
 print
 print
