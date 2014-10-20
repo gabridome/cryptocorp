@@ -1,15 +1,15 @@
 #!/usr/bin/python
 #Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
-# Questo é il seed.
+# Questo e' il seed.
 # Da questo con uno SHA 512 ottengo una stringa di 64 caratteri (512 bits)
 # Divido la stringa in due da 128 bits (o 32 caratteri e con i primi 32 facciola Master private key e con la seconda faccio il chain code)
 # Con la chiave privata ottengo una chiave pubblica.
 
 # Con queste due e il chain code ottengo la prima coppia (pubblica e privata di extended keys (k,c) privata e (K,c) pubblica)
-# Questo é il master extendeded node.
-# Nella notazione ufficiale é chiamato m
+# Questo e' il master extendeded node.
+# Nella notazione ufficiale e' chiamato m
 # La struttura di defaul prevede che i figli siano gli accounts quindi possono essere innumerevoli.
-# Ciascuno degli accounts però può avere solo due figli: 0 e 1 rispettivamente per gli indirizzi esterni e interni.
+# Ciascuno degli accounts pero' puo' avere solo due figli: 0 e 1 rispettivamente per gli indirizzi esterni e interni.
 # I figli esterni ed interni possono poi avere innumerevoli figli e nipoti. Es: primo account (0), esterno (0) portafoglio 532 =m/0/0/532
 
 
@@ -36,9 +36,9 @@ msk1 = "xprv9s21ZrQH143K3YWKyCt7zyDZdbWHRLxT8u66rUg1nCKgVShH3ELECXpnsaCgSMfRv3Gp
 
 # impostando a "m" per master si ottiene
 # Private key (WIF) KzpRD7AseqCJsxHGadoHwLYVPPXBBSRPcpSM9Da6Gum1Q2FmXN2m
-# Derived Public Key (in realtà é una master) 
+# Derived Public Key (in realta' e' una master) 
 mpk1 = "xpub661MyMwAqRbcG2ao5ER8N7AJBdLmpogJW81hes5dLXrfNF2RameUkL9GisfAt3CeqoE7oY8RdKwHKcYAZUb4MtZhnPi4ABRP185iYCrrxwT"
-# Questi non verranno usati perché fanno parte di una master
+# Questi non verranno usati perche' fanno parte di una master
 msk2 = "xprv9s21ZrQH143K3TBwt5FDxr4Hse7HpxyBMiEvRa3RHKrWCqWZ9dWVfTzpirNWjYWiQQuQzYWAQsXD4PbooL3dv6wBNVEjkVH83FRFeMJCk14"
 mpk2 = "xpub661MyMwAqRbcFwGQz6nEKz12RfwnERh2iwAXDxT2qfPV5dqhhApkDGKJa9hrNJXEnCjR6aXmuPrAanjeSSh6Qpo2sFCpVqDucNxon7z4un7"
 
@@ -62,42 +62,48 @@ keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)
 
 #Ora che hai le master keys devi costruire le chiavi figlie
 # Per generare delle chiavi master bip32 extended puoi partire da una frase:
-# BIP32Node.from_master_secret("Questa frase molto lunga deve essere con abbastanza entropiahwxòuwhm984")
+# BIP32Node.from_master_secret("Questa frase molto lunga deve essere con abbastanza entropiahwxuwhm984")
 # Oppure genero un portafoglio da una BIP32 extended master key. Es dal test vector numero 1
 # BIP32Node.from_hwif("xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
 
 mypriv = BIP32Node.from_hwif(msk1)
 #
-print "questa é la chiave in formato WIF di mypriv: " +  str(Key.wif(mypriv))
-print "queste sono le coordinate della chiave mypriv: " +  str(Key.public_pair(mypriv))
-print "la chiave mypriv in formato hex: " +  str(Key.sec_as_hex(mypriv))
-print "L'indirizzo della chiave mypriv: " +  str(Key.address(mypriv,use_uncompressed=False))
-print "a textual representation of mypriv: " +  str(Key.as_text(mypriv))
-print "Sottochiave 0/0/3/5 di mypriv: " +  str(Key.subkey(mypriv, "0/0/3/5"))
-
-# creo un bip32 wallet da una masterkey
-print "creo un bip32 wallet dalla masterkey" + msk1
-mynewkey = BIP32Node.from_master_secret(msk1)
-# profondità di questa chiave é
-print "La profondità di questa chiave é : " + BIP32Node.tree_depth(mynewkey) + "ovvio. E\' la masterkey"
-print "L\'indice del figlio é : " + BIP32Node.child_index(mynewkey) + "ovvio. E\' la masterkey"
-print "Fingerprint della chiave  : " + BIP32Node.fingerprint(mynewkey) 
-print "Fingerprint del genitore  : " + BIP32Node.parent_fingerprint(mynewkey) 
-print "Master Public key  : " + BIP32Node.hwif(mynewkey)
-print "Master secret key  : " + BIP32Node.hwif(mynewkey, as_private=True)
-
-
-path = "3H/0/5"
-
-mynewsubkey = BIP32Node.subkey_for_path(mynewkey, path)
-print "Il percorso é: " + path
-print "La profondità di questa chiave e\' : " + str(BIP32Node.tree_depth(mynewsubkey))
-print "L\'indice del figlio é : " + str(BIP32Node.child_index(mynewsubkey))
-print "subkey extended public : " + BIP32Node.hwif(mynewsubkey)
-print "subkey extended private  : " + BIP32Node.hwif(mynewsubkey, as_private=True)
-print "Per il percorso " + path + " la chiave in WIF e\'  : " +  BIP32Node.wif(mynewsubkey)
-print "L'indirizzo utilizzabile e\': " + BIP32Node.address(mynewsubkey)
-
+# I build a wallet frm vector 1
+testvector1 = BIP32Node.from_hwif("xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
+print
+print
+print
+print "Now BIP32Node:"
+print
+print "Master secret key               : " + testvector1.hwif(as_private=True)
+print "Extended Master Public key      : " + testvector1.hwif()
+print "Chain code                      : " + testvector1.chain_code()
+print
+print "Key fingerprint                 : " + testvector1.fingerprint()
+print "Key depth                       : " + str(testvector1.tree_depth())
+print "Child index                     : " + str(testvector1.child_index())
+print "WIF format master key (unuseful): " + str(Key.wif(testvector1))
+print "Textual representation of key   : " + str(Key.as_text(testvector1))
+print "public pair of the key          : " + str(Key.public_pair(testvector1))
+print "Master key in hex format        : " + str(Key.sec_as_hex(testvector1))
+print "Address of the key              : " + str(Key.address(testvector1,use_uncompressed=False))
+print 
+print
+print "Subkey:"
+path = "0H/1/2H/2"
+mynewsubkey = BIP32Node.subkey_for_path(testvector1, path)
+print "the path is                     : " + path
+print "new key depth                   : " + str(mynewsubkey.tree_depth())
+print "Child index                     : " + str(mynewsubkey.child_index())
+print "subkey extended public          : " + mynewsubkey.hwif()
+print "subkey extended private         : " + mynewsubkey.hwif(as_private=True)
+print "Key fingerprint                 : " + mynewsubkey.fingerprint()
+print "WIF key                         : " + mynewsubkey.wif()
+print "Public key to use in multisig   : " + Key.as_text(Key.public_copy(mynewsubkey))
+print "Address                         : " + mynewsubkey.address()
+print
+print
+print
 
 
 
@@ -123,5 +129,5 @@ payload =  {
 apiurl = "https://s.digitaloracle.co"
 command = "keychains"
 requrl = apiurl + "/" + command + "/" + keychainId    
-r = requests.post(requrl, data=payload)
+#r = requests.post(requrl, data=payload)
 
