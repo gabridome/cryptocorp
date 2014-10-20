@@ -61,7 +61,12 @@ import uuid
 keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)))
 
 #Ora che hai le master keys devi costruire le chiavi figlie
-mypriv = Key.from_text(msk1)
+# Per generare delle chiavi master bip32 extended puoi partire da una frase:
+# BIP32Node.from_master_secret("Questa frase molto lunga deve essere con abbastanza entropiahwxòuwhm984)
+# Oppure genero un portafoglio da una BIP32 extended master key
+# BIP32Node.from_hwif("xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
+
+mypriv = BIP32Node.from_hwif(msk1)
 #
 print "questa é la chiave in formato WIF di mypriv: " +  str(Key.wif(mypriv))
 print "queste sono le coordinate della chiave mypriv: " +  str(Key.public_pair(mypriv))
@@ -79,6 +84,7 @@ print "L\'indice del figlio é : " + BIP32Node.child_index(mynewkey) + "ovvio. E
 print "Fingerprint della chiave  : " + BIP32Node.fingerprint(mynewkey) 
 print "Fingerprint del genitore  : " + BIP32Node.parent_fingerprint(mynewkey) 
 print "Master Public key  : " + BIP32Node.hwif(mynewkey)
+print "Master secret key  : " + BIP32Node.hwif(mynewkey, as_private=True)
 
 path = "3H/0/5"
 
