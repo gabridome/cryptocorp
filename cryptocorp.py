@@ -62,8 +62,8 @@ keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)
 
 #Ora che hai le master keys devi costruire le chiavi figlie
 # Per generare delle chiavi master bip32 extended puoi partire da una frase:
-# BIP32Node.from_master_secret("Questa frase molto lunga deve essere con abbastanza entropiahwxòuwhm984)
-# Oppure genero un portafoglio da una BIP32 extended master key
+# BIP32Node.from_master_secret("Questa frase molto lunga deve essere con abbastanza entropiahwxòuwhm984")
+# Oppure genero un portafoglio da una BIP32 extended master key. Es dal test vector numero 1
 # BIP32Node.from_hwif("xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
 
 mypriv = BIP32Node.from_hwif(msk1)
@@ -86,13 +86,17 @@ print "Fingerprint del genitore  : " + BIP32Node.parent_fingerprint(mynewkey)
 print "Master Public key  : " + BIP32Node.hwif(mynewkey)
 print "Master secret key  : " + BIP32Node.hwif(mynewkey, as_private=True)
 
+
 path = "3H/0/5"
 
-print "Per il percorso " + path + " la chiave in WIF e\'  : " +  BIP32Node.wif(BIP32Node.subkey_for_path(mynewkey, path))
-print "e la pubblica " + path + " e\'  : " +  BIP32Node.hwif(BIP32Node.subkey_for_path(mynewkey, path))
-
-print "La profondità di questa chiave e\' : " + str(BIP32Node.tree_depth(BIP32Node.subkey_for_path(mynewkey, path)))
-print "L\'indice del figlio é : " + str(BIP32Node.child_index(BIP32Node.subkey_for_path(mynewkey, path)))
+mynewsubkey = BIP32Node.subkey_for_path(mynewkey, path)
+print "Il percorso é: " + path
+print "La profondità di questa chiave e\' : " + str(BIP32Node.tree_depth(mynewsubkey))
+print "L\'indice del figlio é : " + str(BIP32Node.child_index(mynewsubkey))
+print "subkey extended public : " + BIP32Node.hwif(mynewsubkey)
+print "subkey extended private  : " + BIP32Node.hwif(mynewsubkey, as_private=True)
+print "Per il percorso " + path + " la chiave in WIF e\'  : " +  BIP32Node.wif(mynewsubkey)
+print "L'indirizzo utilizzabile e\': " + BIP32Node.address(mynewsubkey)
 
 
 
