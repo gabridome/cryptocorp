@@ -54,9 +54,11 @@ mpk3 = "xpub661MyMwAqRbcFRkyY9XXx6jPMXZ5f4PgJ7C27rE7w1XtyhnH1BefhZk4WH23KEcMxvJy
 
 from pycoin.key import *
 from pycoin.key.BIP32Node import *
+from pycoin.serialize import b2h
+
 
 import uuid
-
+import binascii
 
 keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)))
 
@@ -77,9 +79,9 @@ print ("Now BIP32Node:")
 print()
 print("Master secret key               : " + testvector1.hwif(as_private=True))
 print("Extended Master Public key      : " + testvector1.hwif())
-print("Chain code                      : " + testvector1.chain_code())
+print("Chain code                      : " + b2h(testvector1.chain_code()))
 print()
-print("Key fingerprint                 : " + testvector1.fingerprint())
+print("Key fingerprint                 : " + b2h(testvector1.fingerprint()))
 print("Key depth                       : " + str(testvector1.tree_depth()))
 print("Child index                     : " + str(testvector1.child_index()))
 print("WIF format master key (unuseful): " + str(Key.wif(testvector1)))
@@ -90,17 +92,18 @@ print("Address of the key              : " + str(Key.address(testvector1,use_unc
 print()
 print()
 print("Subkey:")
-path = "0H/1/2H/2"
+path = "0H/1/2H/2/1000000000"
 mynewsubkey = BIP32Node.subkey_for_path(testvector1, path)
 print("the path is                     : " + path)
 print("new key depth                   : " + str(mynewsubkey.tree_depth()))
 print("Child index                     : " + str(mynewsubkey.child_index()))
 print("subkey extended public          : " + mynewsubkey.hwif())
 print("subkey extended private         : " + mynewsubkey.hwif(as_private=True))
-print("Key fingerprint                 : " + mynewsubkey.fingerprint())
+print("Key fingerprint                 : " + b2h(mynewsubkey.fingerprint()))
 print("Secret exponent                 : " + str(mynewsubkey.secret_exponent()))
+print("The key for the p2sh:")
 print("WIF key                         : " + mynewsubkey.wif())
-print("Public key to use in multisig   : " + str(BIP32Node.public_copy(mynewsubkey)))
+print("Public key to use in multisig   : " + Key.sec_as_hex(mynewsubkey))
 print("Address                         : " + mynewsubkey.address())
 print()
 print()
