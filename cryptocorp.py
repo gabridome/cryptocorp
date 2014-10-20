@@ -70,41 +70,41 @@ mypriv = BIP32Node.from_hwif(msk1)
 #
 # I build a wallet frm vector 1
 testvector1 = BIP32Node.from_hwif("xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
-print
-print
-print
-print "Now BIP32Node:"
-print
-print "Master secret key               : " + testvector1.hwif(as_private=True)
-print "Extended Master Public key      : " + testvector1.hwif()
-print "Chain code                      : " + testvector1.chain_code()
-print
-print "Key fingerprint                 : " + testvector1.fingerprint()
-print "Key depth                       : " + str(testvector1.tree_depth())
-print "Child index                     : " + str(testvector1.child_index())
-print "WIF format master key (unuseful): " + str(Key.wif(testvector1))
-print "Textual representation of key   : " + str(Key.as_text(testvector1))
-print "public pair of the key          : " + str(Key.public_pair(testvector1))
-print "Master key in hex format        : " + str(Key.sec_as_hex(testvector1))
-print "Address of the key              : " + str(Key.address(testvector1,use_uncompressed=False))
-print 
-print
-print "Subkey:"
+print()
+print()
+print()
+print ("Now BIP32Node:")
+print()
+print("Master secret key               : " + testvector1.hwif(as_private=True))
+print("Extended Master Public key      : " + testvector1.hwif())
+print("Chain code                      : " + testvector1.chain_code())
+print()
+print("Key fingerprint                 : " + testvector1.fingerprint())
+print("Key depth                       : " + str(testvector1.tree_depth()))
+print("Child index                     : " + str(testvector1.child_index()))
+print("WIF format master key (unuseful): " + str(Key.wif(testvector1)))
+print("Textual representation of key   : " + str(Key.as_text(testvector1)))
+print("public pair of the key          : " + str(Key.public_pair(testvector1)))
+print("Master key in hex format        : " + str(Key.sec_as_hex(testvector1)))
+print("Address of the key              : " + str(Key.address(testvector1,use_uncompressed=False)))
+print()
+print()
+print("Subkey:")
 path = "0H/1/2H/2"
 mynewsubkey = BIP32Node.subkey_for_path(testvector1, path)
-print "the path is                     : " + path
-print "new key depth                   : " + str(mynewsubkey.tree_depth())
-print "Child index                     : " + str(mynewsubkey.child_index())
-print "subkey extended public          : " + mynewsubkey.hwif()
-print "subkey extended private         : " + mynewsubkey.hwif(as_private=True)
-print "Key fingerprint                 : " + mynewsubkey.fingerprint()
-print "Secret exponent                 : " + mynewsubkey.secret_exponent()
-print "WIF key                         : " + mynewsubkey.wif()
-print "Public key to use in multisig   : " + str(BIP32Node.public_copy(mynewsubkey))
-print "Address                         : " + mynewsubkey.address()
-print
-print
-print
+print("the path is                     : " + path)
+print("new key depth                   : " + str(mynewsubkey.tree_depth()))
+print("Child index                     : " + str(mynewsubkey.child_index()))
+print("subkey extended public          : " + mynewsubkey.hwif())
+print("subkey extended private         : " + mynewsubkey.hwif(as_private=True))
+print("Key fingerprint                 : " + mynewsubkey.fingerprint())
+print("Secret exponent                 : " + str(mynewsubkey.secret_exponent()))
+print("WIF key                         : " + mynewsubkey.wif())
+print("Public key to use in multisig   : " + str(BIP32Node.public_copy(mynewsubkey)))
+print("Address                         : " + mynewsubkey.address())
+print()
+print()
+print()
 
 
 
