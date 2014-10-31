@@ -1,5 +1,11 @@
 #!/usr/bin/python
-#Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
+from pycoin.key import *
+from pycoin.key.BIP32Node import *
+from pycoin.serialize import b2h
+import uuid
+import binascii
+
+# Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
 # Questo e' il seed.
 # Da questo con uno SHA 512 ottengo una stringa di 64 caratteri (512 bits)
 # Divido la stringa in due da 128 bits (o 32 caratteri e con i primi 32 facciola Master private key e con la seconda faccio il chain code)
@@ -39,6 +45,7 @@ msk1 = "xprv9s21ZrQH143K3YWKyCt7zyDZdbWHRLxT8u66rUg1nCKgVShH3ELECXpnsaCgSMfRv3Gp
 # Derived Public Key (in realta' e' una master) 
 mpk1 = "xpub661MyMwAqRbcG2ao5ER8N7AJBdLmpogJW81hes5dLXrfNF2RameUkL9GisfAt3CeqoE7oY8RdKwHKcYAZUb4MtZhnPi4ABRP185iYCrrxwT"
 # Questi non verranno usati perche' fanno parte di una master
+
 msk2 = "xprv9s21ZrQH143K3TBwt5FDxr4Hse7HpxyBMiEvRa3RHKrWCqWZ9dWVfTzpirNWjYWiQQuQzYWAQsXD4PbooL3dv6wBNVEjkVH83FRFeMJCk14"
 mpk2 = "xpub661MyMwAqRbcFwGQz6nEKz12RfwnERh2iwAXDxT2qfPV5dqhhApkDGKJa9hrNJXEnCjR6aXmuPrAanjeSSh6Qpo2sFCpVqDucNxon7z4un7"
 
@@ -52,13 +59,6 @@ mpk3 = "xpub661MyMwAqRbcFRkyY9XXx6jPMXZ5f4PgJ7C27rE7w1XtyhnH1BefhZk4WH23KEcMxvJy
 #Public key (Hex) # Private key (WIF) KzpRD7AseqCJsxHGadoHwLYVPPXBBSRPcpSM9Da6Gum1Q2FmXN2m
 # address 1HTTvgjWv9zdYdhCvu9biRG3gYu2RBVhCq
 
-from pycoin.key import *
-from pycoin.key.BIP32Node import *
-from pycoin.serialize import b2h
-
-
-import uuid
-import binascii
 
 keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)))
 
@@ -72,8 +72,7 @@ mypriv = BIP32Node.from_hwif(msk1)
 #
 # I build a wallet frm vector 1
 testvector1 = BIP32Node.from_hwif("xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
-print()
-print()
+#########
 print()
 print ("Now BIP32Node:")
 print()
@@ -109,29 +108,39 @@ print()
 print()
 print()
 
+rulesetId = "default"
+walletAgent = "HDM-2.0-cc-011"
+keys = [mpk1, mpk2]
+asset = "BTC"
+period = 60
+value = 0.0
+delay = 60
+phone = "+393489992529"
+email = "gabridome@fastmail.fm"
+
+def createchain(email,phone,mpk):
+    payload =  {"rulesetId": rulesetId, "walletAgent": walletAgent, "keys": keys, "parameters": {"levels": [{"asset": asset, "period": period, "value": value}, {"delay": delay, "calls": ["phone","email"]}]},"pii": { "email": email, "phone": phone }}
+    apiurl = "https://s.digitaloracle.co"
+    keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk)))
+    command = "keychains"
+    requrl = apiurl + "/" + command + "/" + keychainId
+    print(requrl)
+    headers = {'content-type': 'application/json'}  
+    r = requests.post(requrl, data=json.dumps(payload), headers=headers)
+    return r
 
 
-payload =  {
-    "walletAgent": "HDM-2.0-cc-100",
-    "rulesetId": "default",
-    "keys": [mpk1, mpk2, mpk3],
-    "parameters": {
-        "levels": [ {
-            "asset": "BTC",
-            "period": 60,
-            "value": 0.0
-        }, {
-            "delay": 0,
-            "calls": ['phone', 'email']
-        }, ]
-   },
+def verify(email, phone, mpk):
+    payload =  {"walletAgent": "HDM-2.0-cc-test",
     "pii": { 
-        "email": "user@example.com", 
-        "phone": "+14155551212" 
-    } 
-}
-apiurl = "https://s.digitaloracle.co"
-command = "keychains"
-requrl = apiurl + "/" + command + "/" + keychainId    
-#r = requests.post(requrl, data=payload)
-
+    "email": email, 
+    "phone": phone } ,
+    "call": "phone"}
+    keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)))
+    apiurl = "https://s.digitaloracle.co"
+    command = "verifypii"
+    requrl = apiurl + "/keychains/" + keychainId + "/" + command
+    print(requrl)
+    headers = {'content-type': 'application/json'}  
+    r = requests.post(requrl, data=json.dumps(payload), headers=headers)
+    return r
