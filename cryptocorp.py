@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 #Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
 # Questo e' il seed.
 # Da questo con uno SHA 512 ottengo una stringa di 64 caratteri (512 bits)
