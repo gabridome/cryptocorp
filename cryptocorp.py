@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+#Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
 from pycoin.key import *
 from pycoin.key.BIP32Node import *
 from pycoin.serialize import b2h
