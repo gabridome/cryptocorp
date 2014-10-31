@@ -1,17 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
+# Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
+# Questo e' il seed.
+# Da questo con uno SHA 512 ottengo una stringa di 64 caratteri (512 bits)
+# Divido la stringa in due da 128 bits (o 32 caratteri e con i primi 32 facciola Master private key e con la seconda faccio il chain code)
+# Con la chiave privata ottengo una chiave pubblica.
 from pycoin.key import *
 from pycoin.key.BIP32Node import *
 from pycoin.serialize import b2h
 import uuid
 import binascii
 
-# Prima di tutto devo generare 128, 256 o 512 bits di entropia. Consigliati 256.
-# Questo e' il seed.
-# Da questo con uno SHA 512 ottengo una stringa di 64 caratteri (512 bits)
-# Divido la stringa in due da 128 bits (o 32 caratteri e con i primi 32 facciola Master private key e con la seconda faccio il chain code)
-# Con la chiave privata ottengo una chiave pubblica.
 
 # Con queste due e il chain code ottengo la prima coppia (pubblica e privata di extended keys (k,c) privata e (K,c) pubblica)
 # Questo e' il master extendeded node.
@@ -19,9 +19,9 @@ import binascii
 # La struttura di defaul prevede che i figli siano gli accounts quindi possono essere innumerevoli.
 # Ciascuno degli accounts pero' puo' avere solo due figli: 0 e 1 rispettivamente per gli indirizzi esterni e interni.
 # I figli esterni ed interni possono poi avere innumerevoli figli e nipoti. Es: primo account (0), esterno (0) portafoglio 532 =m/0/0/532
+# To shorten notation, we will write CKDpriv(CKDpriv(CKDpriv(m,3H),2),5) as m/3H/2/5. Equivalently for public keys, we write CKDpub(CKDp
 
 
-#To shorten notation, we will write CKDpriv(CKDpriv(CKDpriv(m,3H),2),5) as m/3H/2/5. Equivalently for public keys, we write CKDpub(CKDp
 # Master key generation
 
 # Generate a ********* seed *********** byte sequence S of a chosen length (between 128 and 512 bits; 256 bits is advised) from a (P)RNG.

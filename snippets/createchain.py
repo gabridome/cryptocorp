@@ -27,31 +27,22 @@ from pycoin.serialize import b2h
 
 import uuid
 import binascii
+rulesetId = "default"
+walletAgent = "HDM-2.0-cc-011"
+keys = [mpk1, mpk2]
+asset = "BTC"
+period = 60
+value = 0.0
+delay = 60
+phone = "+393489992529"
+email = "gabridome@fastmail.fm"
 
-keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk3)))
-
-
-payload =  {
-    "walletAgent": "HDM-2.0-cc-100",
-    "rulesetId": "default",
-    "keys": [mpk1, mpk2, mpk3],
-    "parameters": {
-        "levels": [ {
-            "asset": "BTC",
-            "period": 60,
-            "value": 0.0
-        }, {
-            "delay": 0,
-            "calls": ['phone', 'email']
-        }, ]
-   },
-    "pii": { 
-        "email": "user@example.com", 
-        "phone": "+14155551212" 
-    } 
-}
+payload =  {"rulesetId": rulesetId, "walletAgent": walletAgent, "keys": keys, "parameters": {"levels": [{"asset": asset, "period": period, "value": value}, {"delay": delay, "calls": ["phone","email"]}]},"pii": { "email": email, "phone": phone }}
 apiurl = "https://s.digitaloracle.co"
+keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk)))
 command = "keychains"
-requrl = apiurl + "/" + command + "/" + keychainId    
-#r = requests.post(requrl, data=payload)
-
+requrl = apiurl + "/" + command + "/" + keychainId
+print(requrl)
+headers = {'content-type': 'application/json'}  
+r = requests.post(requrl, data=json.dumps(payload), headers=headers)
+r
