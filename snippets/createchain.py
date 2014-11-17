@@ -7,22 +7,16 @@ import binascii
 import requests
 import json
 from pycoin.key import *
+from pycoin.key.BIP32Node import BIP32Node
+from pycoin.scripts.ku import * #To generate entropy
 
-#http://ms-brainwallet.org/#bip32 is a site where you can generate a bunch of keys for testing
-# 
-# You must provide two BIP32 Extended keys. Here below are the "xprv...." strings. Substitute those with yours.
+# create two random BIP32 Wallet
+hwif1 = BIP32Node.from_master_secret(get_entropy())
+hwif2 = BIP32Node.from_master_secret(get_entropy())
 
-# Extended Private key number 1:
-bip32w1 = Key.from_text("xprv9s21ZrQH143K2rQnHxHvkQ2N5EQNy8JN76hnJSm8TYfLNBeJb9f94D79LWBjwscqfeykyvHMeufJALHyy4iqPSd81rgft3777U36eKsYgSA")
 
-# Extended Private key number 2:
-
-bip32w2 = Key.from_text("xprv9s21ZrQH143K3meYuDjr6RAzhYdZLj8KMJvkbsZhhLfgC7TL5iMREmoGnStr255EQqf4cgCSoM3r9SDxWNpEk62D8RgwHWqQSSteyDZfSKf")
-
-# Obtaining the  public extended bip32 keys
-
-mpk1 = bip32w1.hwif()
-mpk2 = bip32w2.hwif()
+mpk1 = hwif1.hwif()
+mpk2 = hwif2.hwif()
 
 #set the parameters for the new chain:
 rulesetId = "default"
