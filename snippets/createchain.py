@@ -9,6 +9,9 @@ import json
 from pycoin.key import *
 from pycoin.key.BIP32Node import BIP32Node
 from pycoin.scripts.ku import * #To generate entropy
+from pycoin.tx.pay_to import ScriptMultisig #per generare script e address
+from pycoin.tx.pay_to import address_for_pay_to_script, build_hash160_lookup, build_p2sh_lookup #to get the address from the script
+
 
 # create two random BIP32 Wallet
 hwif1 = BIP32Node.from_master_secret(get_entropy())
@@ -51,3 +54,20 @@ print("Gererated public wallet : %s" % mpk3)
 print("BIP32 wallet n.1        : %s" % hwif1.hwif(as_private=True))
 print("BIP32 wallet n.2        : %s" % hwif2.hwif(as_private=True))
 print()
+
+#path: 0/0/7 easy to remember
+
+path = "0/0/7"
+
+#public subkeys in sec binary format (because ScriptMultisig requires it)
+spk1 = BIP32Node.subkey_for_path(Key.from_text(mpk1), path).sec()
+spk2 = BIP32Node.subkey_for_path(Key.from_text(mpk2), path).sec()
+spk3 = BIP32Node.subkey_for_path(Key.from_text(mpk3), path).sec()
+
+#list of the public keys in sec format
+keys = [spk1, spk2, spk3]
+script = ScriptMultisig(n=2, sec_keys=keys).script()
+address = address_for_pay_to_script(script)
+
+
+
