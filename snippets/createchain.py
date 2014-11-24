@@ -11,7 +11,9 @@ from pycoin.key.BIP32Node import BIP32Node
 from pycoin.scripts.ku import * #To generate entropy
 from pycoin.tx.pay_to import ScriptMultisig #per generare script e address
 from pycoin.tx.pay_to import address_for_pay_to_script, build_hash160_lookup, build_p2sh_lookup #to get the address from the script
+from pycoin.tx import Tx, TxIn, TxOut, SIGHASH_ALL, tx_utils
 from pycoin.serialize import b2h # to print script in a readable format
+from pycoin.services import blockr_io #to grab the spendables
 
 # create two random BIP32 Wallet
 hwif1 = BIP32Node.from_master_secret(get_entropy())
@@ -44,6 +46,7 @@ headers = {'content-type': 'application/json'}
 r = requests.post(requrl, data=json.dumps(payload), headers=headers)
 r.json()
 mpk3 = str(r.json()['keys']['default'][0])
+hmpk1 = Key.from_text(mpk3)
 print()
 print(r.text)
 # being this a demontrational code no file or directies will be created.
@@ -59,32 +62,42 @@ print()
 
 path = "0/0/7"
 
-#public subkeys in sec binary format (because ScriptMultisig requires it)
-spk1 = BIP32Node.subkey_for_path(Key.from_text(mpk1), path).sec()
-spk2 = BIP32Node.subkey_for_path(Key.from_text(mpk2), path).sec()
-spk3 = BIP32Node.subkey_for_path(Key.from_text(mpk3), path).sec()
+
+spk1 = BIP32Node.subkey_for_path(hwif1, path)
+spk2 = BIP32Node.subkey_for_path(hwif2, path)
+spk3 = BIP32Node.subkey_for_path(hmpk1, path)
 
 #list of the public keys in sec format (to display them)
-print("keys in hex:")
-print (BIP32Node.subkey_for_path(Key.from_text(mpk1), path).sec_as_hex())
-print (BIP32Node.subkey_for_path(Key.from_text(mpk2), path).sec_as_hex())
-print (BIP32Node.subkey_for_path(Key.from_text(mpk3), path).sec_as_hex())
+print("public keys in hex:")
+print (BIP32Node.subkey_for_path(hwif1, path).sec_as_hex())
+print (BIP32Node.subkey_for_path(hwif2, path).sec_as_hex())
+print (BIP32Node.subkey_for_path(hmpk1, path).sec_as_hex())
 
+#public subkeys in sec binary format (because ScriptMultisig requires it)
 keys = [spk1, spk2, spk3] #just remember that the third has not the secret exponent
 print(keys)
-tx_in = TxIn.coinbase_tx_in(script=b'')
-script = ScriptMultisig(n=2, sec_keys=keys).script()
-tx_out = TxOut(10000, script) # 0.1 mBits
+script = ScriptMultisig(n=2, sec_keys=[key.sec() for key in keys]).script()
 print("script:")
 print(b2h(script))
 address = address_for_pay_to_script(script)
 print(address)
+# Everything's ok until here
+"""
+tx_in = TxIn.coinbase_tx_in(script=b'')
+tx_out = TxOut(10000, script) # 0.1 mBits
+
+
 tx1 = Tx(version=1, txs_in=[tx_in], txs_out=[tx_out])
-tx2 = tx_utils.create_tx(tx1.tx_outs_as_spendable(), [keys[-2].address()]) # I don't take the last key as destination because is the cryptocorp's one
+"""
+
+spendables = blockr_io.spendables_for_address(address) #grab the spendables from an address
+tx = tx_utils.create_tx(spendables, [spk1.address()], fee="standard") # tx with the amount to the destination address. I take one key of which I have the secret key.
 hash160_lookup = build_hash160_lookup(key.secret_exponent() for key in keys[0:2]) # only the first two are private keys
+
 # build_hash160_lookup(key.secret_exponent() for key in keys[0:1]) # I sign only with the first one.
-# also uild_hash160_lookup(Key.secret_exponent(keys[0]))
+# also build_hash160_lookup(Key.secret_exponent(keys[0]))
 tx2.sign(hash160_lookup=hash160_lookup)
+tx2.as_hex() #to be tested
 """
 	tx = create_tx(
         spendables_for_address("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
