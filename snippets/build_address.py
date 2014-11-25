@@ -11,9 +11,13 @@ json_data = json.load(data)
 json_data = ast.literal_eval(json.dumps(json_data))
 private_wallets = json_data['private_wallets']
 public_wallets = json_data['public_wallets']
-#costruisco un figlio
 #private_wallets = [bip32_ckd(key,5) for key in private_wallets]
 #public_wallets = [bip32_ckd(key,5) for key in public_wallets] #it works
+def sub_wallet(path,wallets):
+	subwallets = wallets
+	for i in path:
+		subwallets = [bip32_ckd(key,i) for key in subwallets]
+	return subwallets
 
 # path
 path = '0/0/7'
@@ -34,8 +38,3 @@ address = scriptaddr(script)
 print(script)
 print(address)
 print()
-def sub_wallet(path,wallets):
-	subwallets = wallets
-	for i in path:
-		subwallets = [bip32_ckd(key,i) for key in subwallets]
-	return subwallets
