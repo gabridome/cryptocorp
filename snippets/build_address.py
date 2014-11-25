@@ -13,6 +13,12 @@ public_wallets = json_data['public_wallets']
 #costruisco un figlio
 publics = [bip32_ckd(key,5) for key in public_wallets] #it works
 privates = [bip32_ckd(key,5) for key in private_wallets]
+
+# path
+path = '0/0/7'
+listfrompath = path.split('/')
+pathinnum = [int(n) for n in (path.split('/'))]
+
 # from which the public keys
 public_keys = [bip32_extract_key(key) for key in publics]
 private_keys = [bip32_extract_key(key) for key in privates]
