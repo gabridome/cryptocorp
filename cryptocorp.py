@@ -7,11 +7,11 @@
 # Divido la stringa in due da 128 bits (o 32 caratteri e con i primi 32 facciola Master private key e con la seconda faccio il chain code)
 # Con la chiave privata ottengo una chiave pubblica.
 from pycoin.key import *
-from pycoin.key.BIP32Node import *
+from pycoin.key.BIP32Node import BIP32Node
 from pycoin.serialize import b2h
 import uuid
 import binascii
-
+from pycoin.scripts.ku import * #necessario per generare l'entropia
 
 # Con queste due e il chain code ottengo la prima coppia (pubblica e privata di extended keys (k,c) privata e (K,c) pubblica)
 # Questo e' il master extendeded node.
@@ -23,6 +23,8 @@ import binascii
 
 
 # Master key generation
+chiavequalsiasi = BIP32Node.from_master_secret(get_entropy())
+
 
 # Generate a ********* seed *********** byte sequence S of a chosen length (between 128 and 512 bits; 256 bits is advised) from a (P)RNG.
 # Calculate I = HMAC-SHA512(Key = "Bitcoin seed", Data = S)
