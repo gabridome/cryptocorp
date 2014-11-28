@@ -46,9 +46,10 @@ print("Email       : %s" % email)
 print()
 
 # preparation of the payload of the post with the options
+keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s" % (mpk1)))
 payload =  {"rulesetId": rulesetId, "walletAgent": walletAgent, "keys": keys, "parameters": {"levels": [{"asset": asset, "period": period, "value": value}, {"delay": delay, "calls": ["phone","email"]}]},"pii": { "email": email, "phone": phone }}
 apiurl = "https://s.digitaloracle.co" # sandbox URL
-keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s"%(mpk1)))
+keychainId = str(uuid.uuid5(uuid.NAMESPACE_URL, "urn:digitaloracle.co:%s" % (mpk1)))
 command = "keychains"
 requrl = apiurl + "/" + command + "/" + keychainId
 

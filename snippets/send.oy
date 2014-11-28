@@ -1,0 +1,4 @@
+from bitcoin.bci import *
+from bitcoin.transaction import *
+data = json.load(open("results.json", "r"))
+address = "3Bi36w9RZHmibi1ip7ud9dvtpDt59ij7GC"
