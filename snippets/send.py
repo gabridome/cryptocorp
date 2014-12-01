@@ -5,7 +5,7 @@ import requests
 data = json.load(open("results.json", "r"))
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(data)
-masterKeys = data['my_public_wallets'] #remember that cryptocorp's extended public key goes last
+masterKeys = data['keys'] #remember that cryptocorp's extended public key goes last
 chainPaths = ["0/0/7"]
 # You must not specify an outputChainPaths if the destination is not a p2sh address
 # outputChainPaths = ["0/1/7"] 
