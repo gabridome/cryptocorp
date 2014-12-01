@@ -16,6 +16,9 @@ publics = [bip32_ckd(key,5) for key in public_wallets] #it works
 privates = [bip32_ckd(key,5) for key in private_wallets]
 
 # path
+# to obtain a private key derivation (or hardened child key) you must specify 
+# an index augmented of 2 ** 31.
+# so we must check if in the path there are the string "'", "p", "P" ,"h" or "H".
 path = '0/0/7'
 listfrompath = path.split('/')
 pathinnum = [int(n) for n in (path.split('/'))]
