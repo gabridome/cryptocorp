@@ -60,8 +60,7 @@ def sub_public_keys(chainid, path, ext=".json"):
     json_data = ast.literal_eval(json.dumps(json_data))
     mpkes = json_data['keys']
     mpkes.append(json_data['cryptocorp_MPEK'][0])
-    wallets = sub_wallets(path,mpkes)
-    subwallets = sub_wallets(path,wallets)
+    subwallets = sub_wallets(path,mpkes)
     public_keys = [bip32_extract_key(key) for key in subwallets]
     return public_keys
 
