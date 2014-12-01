@@ -19,7 +19,7 @@ if len(sys.argv) <1:
 data = open(chain_file)
 json_data = json.load(data)
 json_data = ast.literal_eval(json.dumps(json_data))
-cryptocorp_wallet = json_data['cryptocorp_MPEK']
+cryptocorp_MPEK = json_data['cryptocorp_MPEK']
 my_public_wallets = json_data['my_public_wallets']
 private_wallets = json_data['private_wallets']
 #private_wallets = ['xprv9s21ZrQH143K4XcG9k2UAQVxyDDFPcaqoum6fvjjfw8WypRy9nz1wBhFLNKponDYWsNwtgbGLqkt5uXBcW9QuAatAV5yuuGQ8aV72yiFSQw', 'xprv9s21ZrQH143K4CEt7Ds1CK4jifvPFEnUxSsJw4j6f8S8Vi9YVZhmN2dQ9nFZFdr5xKjWE7zxxz5hHABiSpdhTu9Ktw1swfgh8cqgNo76jH5']
@@ -34,7 +34,7 @@ public_wallets = json_data['my_public_wallets']
 print("")
 print("Public BIP32 extended wallets")
 for i in public_wallets: print(i)
-print(cryptocorp_wallet)
+print(cryptocorp_MPEK)
 
 def sub_wallet(path,wallets):
 	subwallets = wallets
@@ -64,7 +64,7 @@ for i in private_subwallets: print(i)
 
 # It is not possible to derive in a "hardened way" a wallet from the sole extended public key
 # therefore the following works only if the path is of normal derived keys
-my_public_wallets.append(cryptocorp_wallet)
+my_public_wallets.append(cryptocorp_MPEK)
 public_subwallets = sub_wallet(pathinnum,public_wallets)
 print("")
 print("public subwallets with path %s" % path)
