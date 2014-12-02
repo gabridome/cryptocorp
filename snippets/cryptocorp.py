@@ -47,12 +47,42 @@ def pathInt(path):
         else: pathinnum.append(int(f))
     return pathinnum
 
-def sub_wallets(path,wallets):
+def sub_wallets(paths,wallets):
     pathinnum = pathInt(path)
     subwallets = wallets
     for i in pathinnum:
         subwallets = [bip32_ckd(key,i) for key in subwallets]
     return subwallets
+
+
+
+def sub_public_key(chainid, path, index, ext=".json"):
+    chain_file = chainid + ext
+    json_data = json.load(open(chain_file))
+    json_data = ast.literal_eval(json.dumps(json_data))
+    mpkes = json_data['keys']
+    mpkes.append(json_data['cryptocorp_MPEK'][0])
+    subwallets = sub_wallets(path,mpkes)
+    public_keys = [bip32_extract_key(key) for key in subwallets]
+    return public_keys
+
+def sub_private_keys(chainid, path, ext=".json"):
+    chain_file = chainid + ext
+    json_data = json.load(open(chain_file))
+    json_data = ast.literal_eval(json.dumps(json_data))
+    mpkes = json_data['private_wallets']
+    subwallets = sub_wallets(path,mpkes)
+    private_keys = [bip32_extract_key(key) for key in subwallets]
+    return private_keys
+
+def sub_wallet(path,wallet):
+    pathinnum = pathInt(path)
+    subwallet = wallet
+    print(pathinnum)
+    for i in pathinnum:
+        subwallet = bip32_ckd(subwallet,i)
+        print(str(i) + " " + subwallet)
+    return subwallet
 
 def sub_public_keys(chainid, path, ext=".json"):
     chain_file = chainid + ext
@@ -64,4 +94,12 @@ def sub_public_keys(chainid, path, ext=".json"):
     public_keys = [bip32_extract_key(key) for key in subwallets]
     return public_keys
 
+def sub_private_key(chainid, path, ext=".json"):
+    chain_file = chainid + ext
+    json_data = json.load(open(chain_file))
+    json_data = ast.literal_eval(json.dumps(json_data))
+    mpkes = json_data['private_wallets']
+    subwallets = sub_wallets(path,mpkes)
+    private_keys = [bip32_extract_key(key) for key in subwallets]
+    return private_keys
 
