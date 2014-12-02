@@ -26,6 +26,7 @@ address = scriptaddr(script)
 
 sub_private_wallets = [sub_wallet(chainPaths[i],private_wallets[i]) for i in range(len(private_wallets))]
 sub_private_keys = [bip32_extract_key(key) for key in sub_private_wallets]
+# chiavi controllate
 
 """
 Transaction {
@@ -40,6 +41,8 @@ Transaction {
 h = history(address)
 outs = outs = [{'value': 10000, 'address': '1GRF5cmvAqQPNVPRHe1TpMZGS1mYFHFQHu'}] 
 transaction = mktx(h, outs)
+# checked: it seems correct but it gives "BAD SIGN" Warning. Probably because is not signed.
+
 
 # this raw transaction is unsigned. Cryptocorp requires it to be signed on our part.
 # The transaction must be signed.
@@ -50,7 +53,7 @@ private_key = sub_private_keys[0]
 # >     bytes (string): the serialized partial transaction
 
 
-script_signature = multisign(transaction,f,script,private_key) # signing the script(s)
+script_signature = multisign(transaction,0,script,private_key) # signing the script(s)
 
 partially_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature)
 #
