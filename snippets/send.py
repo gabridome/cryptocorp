@@ -10,13 +10,14 @@ pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(data)
 masterKeys = data['keys'] #remember that cryptocorp's extended public key goes last
 public_wallets = masterKeys 
+# To obtain the redeem script and the p2sh address we need ALL the public keys involved
 public_wallets.extend(data['cryptocorp_MPEK'])
 chainPaths = ["0/0/7","0/0/7","0/0/7"]
 sub_public_wallets = [sub_wallet(chainPaths[i],public_wallets[i]) for i in range(len(chainPaths))]
 sub_public_keys = [bip32_extract_key(key) for key in sub_public_wallets]
 
 # You must not specify an outputChainPaths if the destination is not a p2sh address
-# outputChainPaths = ["0/1/7"] 
+outputChainPaths = "[null]" 
 
 # address = "3Bi36w9RZHmibi1ip7ud9dvtpDt59ij7GC"
 # inputScripts = ['5221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453ae']
@@ -39,7 +40,7 @@ Transaction {
 """
 # Fetching unspent outputs relative to the address
 h = history(address)
-outs = outs = [{'value': 10000, 'address': '1GRF5cmvAqQPNVPRHe1TpMZGS1mYFHFQHu'}] 
+outs = [{'value': 10000, 'address': '1GRF5cmvAqQPNVPRHe1TpMZGS1mYFHFQHu'}] 
 transaction = mktx(h, outs)
 # checked: it seems correct but it gives "BAD SIGN" Warning. Probably because is not signed.
 
@@ -58,7 +59,7 @@ script_signature = multisign(transaction,0,script,private_key) # signing the scr
 partially_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature)
 #
 # >    inputScripts (array[string]) = an array of the input scripts (redeem scripts) associated with each input
-inputScripts = [script for i in h]
+inputScripts = [script f for i in h]
 # >    inputTransactions (array[string]): the input transactions raw hex
 unspent_outputs = unspent(address)
 tx_ids = []
