@@ -56,7 +56,18 @@ private_key = sub_private_keys[0]
 
 script_signature = multisign(transaction,0,script,private_key) # signing the script(s)
 
-partially_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature)
+# It is important to note that the index refer to the ordinal inside this transaction not to the ordinal 
+# inside the source transaction. 
+
+partially_signed_transaction = apply_multisignatures(transaction, 2, script, script_signature)
+
+# I completely sign the transaction. Just to debug
+private_key2 = sub_private_keys[1]
+
+script_signature2 = multisign(transaction,0,script,private_key2) # signing the script(s)
+
+completely_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature)
+
 #
 # >    inputScripts (array[string]) = an array of the input scripts (redeem scripts) associated with each input
 inputScripts = [script f for i in h]
