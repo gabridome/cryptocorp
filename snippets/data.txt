@@ -19,6 +19,7 @@ path = '0/0/7'
 
 script:
 5221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453ae
+
 script = ScriptMultisig(n=2, sec_keys=[key.sec() for key in keys]).script()
 
 b2h(script)
@@ -26,3 +27,27 @@ b2h(script)
 
 address:
 3Bi36w9RZHmibi1ip7ud9dvtpDt59ij7GC
+
+
+
+rKeys, "chainPaths" : chainPaths},"verifications": { "otp": "123456", "code": "234567" }}
+>>> pp.pprint(payload)
+{   'transaction': {   'bytes': '0100000002bbedb48aacb4dcea45687631cf592035843e754f603f7615b590d2b2f12e858d0000000000ffffffff0076ae0b7d8b4b7b44ac0b2fe2d5dc67aabbf0898291f190c7f9004f3923744301000000b500483045022079f43b8513c6dabcd69f487d392737fa2da5753b72b3e1b8e2bdaf5dc52d2c320221009212a1c7ac31186a032a5ec58ae227a9a0e86bfbd77e0a732295d130fa2d7209014c695221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453aeffffffff0210270000000000001976a914a91f9f763b29340b7d15fddd8b6ee41ac56fc88d88ac307500000000000017a9146de2a879701db827dafec3c1f895b35093205d458700000000',
+                       'chainPaths': ['0/0/7', '0/0/7', '0/0/7'],
+                       'inputScripts': [   '5221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453ae',
+                                           '5221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453ae'],
+                       'inputTransactions': [   '0100000001d4e35ca00241e75edd1c3de7ebb6c4113644f821406e88d6dc1eb50513f2f4ba00000000dc00493046022100f3146e5da89f652fe4dbcc7331bd8aafc9eaecf040aa41aa07e96896e5660ce1022100c96354727ee670afc8c0fb79ac72094ada31e6029bced22c5f14919d68002adf01483045022100cfe27290eff59b9180a79a0407afc9f63be9a44f545262ce4e1cbb43a64123cc02206d453b787713642a9971fa31767a5ed645c7afa0d6beaa79aa07d61a284f5b760147522102c85d81c1ded12eabee5a80109a5a65cfad0b7adc40c09835a465801722920c4a21036ef630e9bb4421ae57df5dac948b36dce45b36a1963e41e76febbc36437965e252aeffffffff02307500000000000017a9146de2a879701db827dafec3c1f895b35093205d4587aebc9d000000000017a9148cb4d5e27784208aa5a556acbd85cce366e813cb8700000000',
+                                                '0100000001d76852c3a9712f9563e36dba2c0154f749e6c2ef219942ca52a74bd9250e40ba00000000fdfd000047304402200a7f08a39f94a3965a172a1e3cfd1a883b8640bd21bcbc3fd2d40119d566a9fe0220515c36bdace2d129ebad4d8feca48e7999d3a03d657aa3dd55737f36f14c14710148304502204835c6513c46b229253386fcd7401aff471962e52e16c0c0de894e55ba889faf022100d767b707230fd8efd9eb3e239726620962be5ad092f5d2b2628f3a1568776957014c695221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453aeffffffff0210270000000000001976a914a91f9f763b29340b7d15fddd8b6ee41ac56fc88d88ac60ea00000000000017a9146de2a879701db827dafec3c1f895b35093205d458700000000'],
+                       'masterKeys': [   u'xpub661MyMwAqRbcH1gjFmZUXYShXF3jo5JhB8ghUK9MEGfVrcm7hLJGUz1jBeeWAdXneVtjKQkDH3qgR7zXazYk7NgkKDTEA3VtQNb2Jroprsr',
+                                         u'xpub661MyMwAqRbcGgKMDFQ1ZT1UGhksehWLKfnujT8iDTy7NWUh3721upwt14DeHsEwEpYWsM2zH57x6BWkYZUqHWqaUTCfQTYWJBKes2j1C7E',
+                                         u'xpub68rQ8y4gfKNAVfmGMM8zn21nbaHw3YXnSeAktk1rcUSQ5hEjDgMSaYTQMDcBr3r2oTcpRp1P7V43HJbPpF2RzLwdxZVANWxCsVvuvfnvauh']},
+    'verifications': {   'code': '234567', 'otp': '123456'},
+    'walletAgent': 'HDM-2.0-cc-022'}
+>>> command = "keychains"
+>>> apiurl = "https://s.digitaloracle.co" # sandbox URL
+>>> requrl = apiurl + "/" + command + "/" + keychainId + "/transactions"
+>>> r = requests.post(requrl, data=json.dumps(payload), headers=headers)
+>>> pp.pprint(r.text)
+u'{\n  "message" : "There was an error processing your request. It has been logged (ID 7481026b30fcaef1)."\n}'
+>>> 
+

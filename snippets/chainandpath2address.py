@@ -5,8 +5,6 @@ from bitcoin.deterministic import *
 from bitcoin.transaction import *
 from cryptocorp import *
 
-print(str(len(sys.argv)))
-
 chainid  = "pythonresults"
 if len(sys.argv) == 3:
 	chainid = sys.argv[2]
