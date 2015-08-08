@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
@@ -9,6 +9,7 @@ from bitcoin.deterministic import *
 import requests
 import uuid
 import json
+
 # The most important thing we have to provide are the Master Public Extended Keys.
 # If we provide One MPEK we will have a 2of2 HDM structure: both private keys (our and Cryptocorp's)
 # will be necessary to spend the funds.

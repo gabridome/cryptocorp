@@ -1,11 +1,13 @@
 from cryptocorp import *
+import os
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 # creating wallets
 mseks = [bip32_master_key(random_key()) for i in range(2)]
 # creating public wallets
 mpeks = [bip32_privtopub(i) for i in mseks]
-
+os.chdir('..')
+os.chdir('chains')
 # you can personalize as follows:
 # rulesetId = "default" # probably a way to save the ruleset for future use
 # walletAgent = "HDM-2.0-cc-021" 
@@ -22,10 +24,12 @@ new_chain_json = createchain(mpeks)
 print("")
 pp.pprint(new_chain_json)
 print("")
-with open(new_chain_json['keychainId'] + ".json", 'w') as outfile:
+os.mkdir(new_chain_json['keychainId'])
+os.chdir(new_chain_json['keychainId'])
+with open("chain" + ".json", 'w') as outfile:
      json.dump(new_chain_json, outfile)
 
-with open(new_chain_json['keychainId'] + ".mseks.json", 'w') as outfile:
+with open("chain" + ".mseks.json", 'w') as outfile:
      json.dump(mseks, outfile)
 
 print("")
