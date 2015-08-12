@@ -51,3 +51,7 @@ rKeys, "chainPaths" : chainPaths},"verifications": { "otp": "123456", "code": "2
 u'{\n  "message" : "There was an error processing your request. It has been logged (ID 7481026b30fcaef1)."\n}'
 >>> 
 
+
+Raw unsigned transaction (pycoin)
+0100000003f1c9357ec8fcd035f4019f34c46f737e1a5eac2a9fd66826412d65b40dc04ff70000000000ffffffff0076ae0b7d8b4b7b44ac0b2fe2d5dc67aabbf0898291f190c7f9004f392374430100000000ffffffffbbedb48aacb4dcea45687631cf592035843e754f603f7615b590d2b2f12e858d0000000000ffffffff0120bf02000000000017a914515762fbab815386e08c7ef0725c719e7e7d2b8b8700000000
+

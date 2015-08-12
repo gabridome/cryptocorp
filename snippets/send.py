@@ -1,11 +1,14 @@
 from bitcoin.bci import *
 from bitcoin.transaction import *
+import os
 import pprint
 import requests
 from cryptocorp import *
-chain_file = "results"
-data = json.load(open((chain_file + ".json"), "r"))
-private_wallets = json.load(open((chain_file + ".mseks.json"), "r"))
+chains_path = '../chains'
+os.chdir(chains_path)
+chainid  = "a9fb11d4-ccfb-5636-8a62-063a89f34874"
+data = json.load(open((chainid + "/chain.json"), "r"))
+private_wallets = json.load(open((chainid + "/chain.mseks.json"), "r"))
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(data)
 masterKeys = data['keys'] #remember that cryptocorp's extended public key goes last
@@ -27,7 +30,11 @@ address = scriptaddr(script)
 
 sub_private_wallets = [sub_wallet(chainPaths[i],private_wallets[i]) for i in range(len(private_wallets))]
 sub_private_keys = [bip32_extract_key(key) for key in sub_private_wallets]
-# chiavi controllate
+#as 2015-08-09 the implementation is flawed on pybitcointools:
+# everytime I extract a key from a bip32 wallet the result is the same as other implementation
+# but with two bytes more at the end:"01"
+# strangely the calculation of the public key (privtopub()) is correct but if I do it with
+# bitaddress.org or ku the output is different from the right public key.
 
 """
 Transaction {
@@ -40,7 +47,8 @@ Transaction {
 """
 # Fetching unspent outputs relative to the address
 h = history(address)
-outs = [{'value': 10000, 'address': '1GRF5cmvAqQPNVPRHe1TpMZGS1mYFHFQHu'}] 
+outs = [{'value': 10000, 'address': '3977Lp7VNWY5L8hY5W2oaNjeR5r8FZ6ban'}, {'value': 250000, 'address': '3Bi36w9RZHmibi1ip7ud9dvtpDt59ij7GC'}] 
+#transaction fee: 30000 and change:250000 returned to the original address
 transaction = mktx(h, outs)
 # checked: it seems correct but it gives "BAD SIGN" Warning. Probably because is not signed.
 
@@ -59,14 +67,17 @@ script_signature = multisign(transaction,0,script,private_key) # signing the scr
 # It is important to note that the index refer to the ordinal inside this transaction not to the ordinal 
 # inside the source transaction. 
 
-partially_signed_transaction = apply_multisignatures(transaction, 2, script, script_signature)
+# This is AFAIK the serialized partial transaction:
+partially_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature)
+
+# tx utility check seems to validate it.
 
 # I completely sign the transaction. Just to debug
 private_key2 = sub_private_keys[1]
 
 script_signature2 = multisign(transaction,0,script,private_key2) # signing the script(s)
 
-completely_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature)
+completely_signed_transaction = apply_multisignatures(transaction, 0, script, script_signature2)
 
 #
 # >    inputScripts (array[string]) = an array of the input scripts (redeem scripts) associated with each input
