@@ -7,12 +7,12 @@ from pycoin.tx.pay_to import ScriptMultisig, ScriptPayToPublicKey, ScriptNulldat
 from pycoin.tx.pay_to import address_for_pay_to_script, build_hash160_lookup, build_p2sh_lookup
 from pycoin.tx.pay_to import script_obj_from_address, script_obj_from_script
 
-# Set up of the variables N is the number of required* keys 
+# Set up of the variables N is the number of required* keys
 # M is the number of possibly capable keys
-N, M = 3, 5
+N, M = 2, 3
 
-# list of keys build from secret exponents 1 to M +2 
-keys = [Key(secret_exponent=i) for i in range(1, M+2)]
+# list of keys build from secret exponents 1 to M +1
+keys = [Key(secret_exponent=i) for i in range(1, M+1)]
 # keys as they appear:
 print("keys as it appears:")
 for i in keys:
@@ -20,13 +20,14 @@ for i in keys:
 
 print("")
 print("list of 'keys' wifs:")
+print("")
 for i in keys:
     print("Secret exponent  : %s " % i.secret_exponent())
     print("WIF  : %s " % i.wif())
     print("SEC  : %s " % i.sec_as_hex())
     print("")
 
-# Fake coinbase transaction to fill our p2sh address 
+
 # Building underlying script to redem the funds with N signatures out of M
 underlying_script = ScriptMultisig(n=N, sec_keys=[key.sec() for key in keys[:M]]).script()
 # I hash the script and transform it into a p2sh address
@@ -37,9 +38,10 @@ print(address)
 # Instead of: OP_DUP OP_HASH160 <PubkeyHash> OP_EQUALVERIFY OP_CHECKSIG
 # your p2sh scriptPubKey will be:
 # OP_HASH160 <hash(redeemScript)> OP_EQUAL
-# standard_tx_out_script(address) restituisce 
+# standard_tx_out_script(address) gives the scriptPubKey for a given multisig address
 script = standard_tx_out_script(address)
-
+# Fake coinbase transaction to fill our p2sh address
+# It it is a coinbase transaction we put in a newly constructed block.
 tx_in = TxIn.coinbase_tx_in(script=b'')
 print("TxIn: %s" %  tx_in.__str__())
 tx_out = TxOut(1000000, script)
@@ -54,12 +56,24 @@ tx2 = tx_utils.create_tx(tx1.tx_outs_as_spendable(), [keys[-1].address()])
 print("unsigned transaction:")
 print("bad signatures: %s" % tx2.bad_signature_count())
 print(tx2.as_hex())
-# Signing with one private key
+# Signing with only the second private key
 """
-hash160_lookup = build_hash160_lookup(key.secret_exponent() for key in keys[:N-2])
+print(keys[1])
+# to build the hash160 lookup I must use the secret exponent of the keys
+# hash160_lookup = build_hash160_lookup(key.secret_exponent() for key in keys[:N-2])
+# In this example I use one key at a time, starting with the second
+hash160_lookup = build_hash160_lookup([keys[1].secret_exponent()])
 p2sh_lookup = build_p2sh_lookup([underlying_script])
 tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
 print("bad signatures: %s" % tx2.bad_signature_count())
+# In this case I will get one bad signature because I have one signature left for the validity
+# I use the third key to complete the requirements
+hash160_lookup = build_hash160_lookup([keys[2].secret_exponent()])
+p2sh_lookup = build_p2sh_lookup([underlying_script])
+tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
+tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
+
+
 """
 # three private keys
 

@@ -18,8 +18,13 @@ os.chdir(chains_path)
 chainid  = "a9fb11d4-ccfb-5636-8a62-063a89f34874"
 result_address = '3Bi36w9RZHmibi1ip7ud9dvtpDt59ij7GC'
 result_script = '5221033cb2f8b318f4c14e42cbe20cb365b2017d28bc557b0dde9eca2fbe8d3c9ed1982102e680e729a24923c09db6f958363b0416bc13970008ab7b925b2f2aa410e6b0a72102208fa0a00d6b9ae56f7cc137a021d03ae294d39242d64322f69bdc785853ba6453ae'
+<<<<<<< Updated upstream
 data = json.load(open((chainid + "/chain.json"), "r"))
 print("Chain:")
+=======
+chain_file = "results"
+data = json.load(open((chain_file + ".json"), "r"))
+>>>>>>> Stashed changes
 pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(data)
 print("")
@@ -39,8 +44,14 @@ print("")
 masterKeys = data['keys'] 
 public_wallets = masterKeys 
 public_wallets.extend(data['cryptocorp_MPEK'])
+<<<<<<< Updated upstream
 
 # Also cryptocorp's key is supplyed
+=======
+private_wallets = json.load(open((chain_file + ".mseks.json"), "r"))
+# The next is because I will use only one key
+private_wallets.remove(private_wallets[1])
+>>>>>>> Stashed changes
 chainPaths = ["0/0/7","0/0/7","0/0/7"]
 print("Chain paths:")
 pp.pprint(chainPaths)
