@@ -9,7 +9,7 @@ from pycoin.tx.pay_to import script_obj_from_address, script_obj_from_script
 
 # Set up of the variables N is the number of required* keys
 # M is the number of possibly capable keys
-N, M = 2, 3
+N, M = 4, 6
 
 # list of keys build from secret exponents 1 to M +1
 keys = [Key(secret_exponent=i) for i in range(1, M+1)]
@@ -56,42 +56,11 @@ tx2 = tx_utils.create_tx(tx1.tx_outs_as_spendable(), [keys[-1].address()])
 print("unsigned transaction:")
 print("bad signatures: %s" % tx2.bad_signature_count())
 print(tx2.as_hex())
-# Signing with only the second private key
-"""
-print(keys[1])
-# to build the hash160 lookup I must use the secret exponent of the keys
-# hash160_lookup = build_hash160_lookup(key.secret_exponent() for key in keys[:N-2])
-# In this example I use one key at a time, starting with the second
-hash160_lookup = build_hash160_lookup([keys[1].secret_exponent()])
-p2sh_lookup = build_p2sh_lookup([underlying_script])
-tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
-print("bad signatures: %s" % tx2.bad_signature_count())
-# In this case I will get one bad signature because I have one signature left for the validity
-# I use the third key to complete the requirements
-hash160_lookup = build_hash160_lookup([keys[2].secret_exponent()])
-p2sh_lookup = build_p2sh_lookup([underlying_script])
-tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
-tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
-
-
-"""
-# three private keys
-
-hash160_lookup = build_hash160_lookup(key.secret_exponent() for key in keys[:N])
-p2sh_lookup = build_p2sh_lookup([underlying_script])
-tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
-print("bad signatures: %s" % tx2.bad_signature_count())
-print(tx2.as_hex())
-tx2.tx_outs_as_spendable()
-"""
 for i in range(1, N+1):
-    print("i: %s" % i)
-    hash160_lookup = build_hash160_lookup(key.secret_exponent() for key in keys[:M])
+    print("signining with key number: %s" % i)
+    hash160_lookup = build_hash160_lookup([keys[i].secret_exponent()])
     p2sh_lookup = build_p2sh_lookup([underlying_script])
     tx2.sign(hash160_lookup=hash160_lookup,p2sh_lookup=p2sh_lookup)
     print(tx2.as_hex())
+    print("This transactions have now : %s signature of %t necessary" % (i, N)) 
     print("bad signatures: %s" % tx2.bad_signature_count())
-"""
-#    print("hash160_lookup: %s" % hash160_lookup)
-#    print("bad signatures: %s" % tx2.bad_signature_count())
-#    print(tx2.as_hex())
